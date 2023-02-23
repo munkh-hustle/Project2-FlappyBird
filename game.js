@@ -1,3 +1,4 @@
+
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext("2d");
 // we will need the gamecontainer to make it blurry
@@ -34,21 +35,21 @@ let highScore = 0;
 let scored = false;
 
 // lets us control the bird with the space key
-document.body.onkeyup = function(e) {
+document.body.onkeyup = function (e) {
     if (e.code == 'Space') {
         birdVelocity = FLAP_SPEED;
     }
 }
 
-//lets us control the bird with the touch
-document.body.ontouchstart = function(e) {
+// //lets us control the bird with the touch
+document.body.ontouchstart = function (e) {
     if (e.touches.length == 1) {
         birdVelocity = FLAP_SPEED;
     }
 }
 
 // lets us restart the game if we hit game-over
-document.getElementById('restart-button').addEventListener('click', function() {
+document.getElementById('restart-button').addEventListener('click', function () {
     hideEndMenu();
     resetGame();
     loop();
@@ -58,10 +59,10 @@ document.getElementById('restart-button').addEventListener('click', function() {
 
 function increaseScore() {
     // increase now our counter when our flappy passes the pipes
-    if(birdX > pipeX + PIPE_WIDTH && 
-        (birdY < pipeY + PIPE_GAP || 
-          birdY + BIRD_HEIGHT > pipeY + PIPE_GAP) && 
-          !scored) {
+    if (birdX > pipeX + PIPE_WIDTH &&
+        (birdY < pipeY + PIPE_GAP ||
+            birdY + BIRD_HEIGHT > pipeY + PIPE_GAP) &&
+        !scored) {
         score++;
         scoreDiv.innerHTML = score;
         scored = true;
@@ -101,14 +102,14 @@ function collisionCheck() {
     if (birdBox.x + birdBox.width > topPipeBox.x &&
         birdBox.x < topPipeBox.x + topPipeBox.width &&
         birdBox.y < topPipeBox.y) {
-            return true;
+        return true;
     }
 
     // Check for collision with lower pipe box
     if (birdBox.x + birdBox.width > bottomPipeBox.x &&
         birdBox.x < bottomPipeBox.x + bottomPipeBox.width &&
         birdBox.y + birdBox.height > bottomPipeBox.y) {
-            return true;
+        return true;
     }
 
     // check if bird hits boundaries
@@ -120,12 +121,12 @@ function collisionCheck() {
     return false;
 }
 
-function hideEndMenu () {
+function hideEndMenu() {
     document.getElementById('end-menu').style.display = 'none';
     gameContainer.classList.remove('backdrop-blur');
 }
 
-function showEndMenu () {
+function showEndMenu() {
     document.getElementById('end-menu').style.display = 'block';
     gameContainer.classList.add('backdrop-blur');
     document.getElementById('end-score').innerHTML = score;
@@ -192,6 +193,35 @@ function loop() {
     // always check if you call the function ...
     increaseScore()
     requestAnimationFrame(loop);
+}
+
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+let interval = null;
+
+document.querySelector("h2").onmouseover = event => {  
+  let iteration = 0;
+  
+  clearInterval(interval);
+  
+  interval = setInterval(() => {
+    event.target.innerText = event.target.innerText
+      .split("")
+      .map((letter, index) => {
+        if(index < iteration) {
+          return event.target.dataset.value[index];
+        }
+      
+        return letters[Math.floor(Math.random() * 26)]
+      })
+      .join("");
+    
+    if(iteration >= event.target.dataset.value.length){ 
+      clearInterval(interval);
+    }
+    
+    iteration += 1 / 3;
+  }, 30);
 }
 
 loop();

@@ -34,8 +34,15 @@ let highScore = 0;
 let scored = false;
 
 // lets us control the bird with the space key
-document.body.onkeyup = function(e) {
-    if (e.code == 'Space') {
+// document.body.onkeyup = function(e) {
+//     if (e.code == 'Space') {
+//         birdVelocity = FLAP_SPEED;
+//     }
+// }
+
+//lets us control the bird with the touch
+document.body.ontouchstart = function(e) {
+    if (e.touches.length == 1) {
         birdVelocity = FLAP_SPEED;
     }
 }
